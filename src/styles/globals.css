@@ -16,3 +16,10 @@
   text-align: center;
   width: 34px;
 }
+
+.game-board {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 99px;
+  gap: 0px
+}

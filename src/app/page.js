@@ -2,11 +2,22 @@
 'use client'
 import { useState } from "react";
 
-function Square({ onClick, value }) {
+function Square({ handler, value }) {
   return (
-    <button onClick={onClick} className="square">{value}</button>
+    <button onClick={handler} className="square">{value}</button>
   );
 };
+
+function Reset({ handler }) {
+  return (
+    <button 
+    onClick={handler} 
+    className="border-solid border-[1px] rounded-md px-4 border-[#999] hover:opacity-70 active:opacity-60"
+    >
+      Reset
+    </button>
+  )
+}
 
 export default function Game() {
   const [board, setBoard] = useState(Array(9).fill(null))
@@ -22,29 +33,44 @@ export default function Game() {
     setBoard(newBoard)
     setXisNext(!xIsNext)
   }
-  const nextPlayer = xIsNext ? 'X' : 'O';
+  let status;
+  let winner = calculateWinner(board);
+  if (!winner) {
+    status = `Next player: ${xIsNext ? 'X' : 'O'}`;
+  } else {
+    status = `Winner: ${winner}`;
+  }
+
+
+  function handleReset() {
+    setBoard(Array(9).fill(null))
+    setXisNext(!xIsNext)
+  }
 
   return (
-    <>
-      <div className="m-12 w-[110px]">
-        <div className="my-2">Next Player: {nextPlayer}</div>
+    <main className="m-12">
+      <div className="my-2">{status}</div>
+      <div className="game-board">
         <div>
-          <Square onClick={() => handleClick(0)} value={board[0]} />
-          <Square onClick={() => handleClick(1)} value={board[1]} />
-          <Square onClick={() => handleClick(2)} value={board[2]} />
+          <Square handler={() => handleClick(0)} value={board[0]} />
+          <Square handler={() => handleClick(1)} value={board[1]} />
+          <Square handler={() => handleClick(2)} value={board[2]} />
         </div>
         <div>
-          <Square onClick={() => handleClick(3)} value={board[3]} />
-          <Square onClick={() => handleClick(4)} value={board[4]} />
-          <Square onClick={() => handleClick(5)} value={board[5]} />
+          <Square handler={() => handleClick(3)} value={board[3]} />
+          <Square handler={() => handleClick(4)} value={board[4]} />
+          <Square handler={() => handleClick(5)} value={board[5]} />
         </div>
         <div>
-          <Square onClick={() => handleClick(6)} value={board[6]} />
-          <Square onClick={() => handleClick(7)} value={board[7]} />
-          <Square onClick={() => handleClick(8)} value={board[8]} />
+          <Square handler={() => handleClick(6)} value={board[6]} />
+          <Square handler={() => handleClick(7)} value={board[7]} />
+          <Square handler={() => handleClick(8)} value={board[8]} />
         </div>
       </div>
-    </>
+      <div className="mt-2">
+        <Reset handler={handleReset} />
+      </div>
+    </main>
   )
 }
 
